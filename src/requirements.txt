@@ -1,0 +1,8 @@
+dash 
+werkzeug
+flask
+dash_core_components
+dash_html_components
+pymongo
+numpy
+pandas
