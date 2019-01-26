@@ -69,7 +69,32 @@ def update_output_div(database,table):
         return html.Div('Invalid table')
 
 # Application 2
-dash_app2.layout = html.Div([html.H1('Hi there, I am app2 for reports')])
+dash_app2.layout = html.Div(children=[
+    html.Div('State Name'),
+    dcc.Dropdown(
+        id='state-name',
+        options=ml.generate_states(dbclient),
+        value='State Name'
+    ),
+    html.Div('County Name'),
+        dcc.Dropdown(
+        id='county-name',
+        options=[{'value':'Table','label':'Table'}],
+        value='County Name'
+    ),
+    html.Div(id='my-table')
+])
+
+@dash_app2.callback(
+    depend.Output(component_id='county-name', component_property='options'),
+    [depend.Input(component_id='state-name', component_property='value')]
+)
+def update_county_name(state):
+    try:
+        county=ml.generate_county(dbclient,state)
+        return county
+    except:
+        return html.Div('Invalid county')
 
 # Setting up the Flask server and applications
 
@@ -94,4 +119,4 @@ app = DispatcherMiddleware(server, {
 
 if __name__ == "__main__":
     
-    run_simple('0.0.0.0', 8080, app, use_reloader=True, use_debugger=True)
+    run_simple('127.0.0.1', 8080, app, use_reloader=True, use_debugger=True)

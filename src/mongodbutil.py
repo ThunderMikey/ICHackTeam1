@@ -79,3 +79,15 @@ def generate_table(dataframe, max_rows=10):
             html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
         ]) for i in range(min(len(dataframe), max_rows))]
     )
+
+# Retrive states and county
+def generate_states(client,dbname='USweather',collectioname='countystate'):
+    states=mongo2df(client,dbname,collectioname)['state_fullname'].unique()
+    dropdownoptions=[{'label':x,'value':x} for x in states]
+    return dropdownoptions
+
+def generate_county(client,state,dbname='USweather',collectioname='countystate'):
+    states=mongo2df(client,dbname,collectioname)
+    county=states[states['state_fullname']==state]['County']
+    dropdownoptions=[{'label':x,'value':x} for x in county]
+    return dropdownoptions
