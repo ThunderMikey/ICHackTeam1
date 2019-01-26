@@ -94,4 +94,4 @@ app = DispatcherMiddleware(server, {
 
 if __name__ == "__main__":
     
-    run_simple('127.0.0.1', 8080, app, use_reloader=True, use_debugger=True)
+    run_simple('0.0.0.0', 8080, app, use_reloader=True, use_debugger=True)
