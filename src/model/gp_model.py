@@ -30,7 +30,7 @@ def train_gp_model(X, y, kernel, alpha = 1e-10):
 						normalize_y=False, copy_X_train=True, random_state=None).fit(X, y)
 
 	# save our regression model
-	dump(gp_model, './gp_model/gp_ker{}.joblib'.format(kernel))
+	dump(gp_model, "./saved_gp_models/gp_ker{}.joblib".format(kernel))
 	
 	return gp_model
 

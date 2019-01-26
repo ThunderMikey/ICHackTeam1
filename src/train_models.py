@@ -6,6 +6,8 @@ import model as model_gp
 if __name__ == "__main__":
 
     # read in data
+    X
+    y
 
     for kernel in [0,1]:
         # using default jitter
