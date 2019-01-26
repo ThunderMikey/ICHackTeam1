@@ -1,0 +1,13 @@
+library(SpatialExtremes)
+
+x <- y <- seq(0, 10, length = 100)
+coord <- cbind(x, y)
+set.seed(8)
+M0 <- rmaxstab(1, coord, "gauss", cov11 = 9/8, cov12 = 0, cov22 = 9/8, grid = TRUE)
+set.seed(8)
+M1 <- rmaxstab(1, coord, "gauss", cov11 = 9/8, cov12 = 3/4, cov22 = 9/8, grid = TRUE)
+png("rmaxstabSmith.png", width = 1400, height = 700)
+par(mfrow = c(1,2))
+image(x, y, log(M0), col = terrain.colors(64))
+image(x, y, log(M1), col = terrain.colors(64))
+dev.off()
