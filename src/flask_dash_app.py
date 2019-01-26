@@ -15,18 +15,6 @@ import model
 
 # Prepare static data to load into application 
 # Realtime data please refer to https://dash.plot.ly/live-updates
-def load_data():
-    client=ml.mongoclient('localhost')
-    client.drop_database('TSDB')
-    ml.csv2mongo(client,'TSDB','TYX','TYX.csv')
-    ml.csv2mongo(client,'TSDB','DJI','DJI.csv')
-    ml.csv2mongo(client,'TSDB','SPXL','SPXL.csv')
-    df=ml.mongo2df(client,'TSDB','TYX')
-    return df
-
-
-# Testing
-load_data()
 
 # Prepare data
 dbhost='localhost'
