@@ -40,6 +40,7 @@ server = flask.Flask(__name__)
 dash_app1 = Dash(__name__, server = server, url_base_pathname='/dashboard/', external_stylesheets=external_stylesheets )
 dash_app2 = Dash(__name__, server = server, url_base_pathname='/reports/')
 
+# Setting layout of apps and callbacks
 dash_app2.layout = html.Div([html.H1('Hi there, I am app2 for reports')])
 
 dash_app1.layout = html.Div(children=[
