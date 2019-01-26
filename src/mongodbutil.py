@@ -1,6 +1,8 @@
 import pymongo 
 import pandas as pd
 import dash_html_components as html
+import plotly.graph_objs as go
+
 
 def mongoclient(url):
     return pymongo.MongoClient(url)
@@ -81,13 +83,62 @@ def generate_table(dataframe, max_rows=10):
     )
 
 # Retrive states and county
-def generate_states(client,dbname='USweather',collectioname='countystate'):
-    states=mongo2df(client,dbname,collectioname)['state_fullname'].unique()
+def get_column_unique(client,dbname='USweather',collectioname='countystate',columname='state_fullname'):
+    states=mongo2df(client,dbname,collectioname)[columname].unique()
     dropdownoptions=[{'label':x,'value':x} for x in states]
     return dropdownoptions
-
-def generate_county(client,state,dbname='USweather',collectioname='countystate'):
+# county depends on states
+def get_depedent_column(client,state,dbname='USweather',collectioname='countystate',independent='state_fullname',dependent='County'):
     states=mongo2df(client,dbname,collectioname)
-    county=states[states['state_fullname']==state]['County']
+    county=states[states[independent]==state][dependent]
     dropdownoptions=[{'label':x,'value':x} for x in county]
     return dropdownoptions
+
+def generate_metrics():
+    dropdownoptions=[{'label':'Max Temperature','value':'maxtemperature'},{'label':'Min Temperature','value':'mintemperature'},{'label':'Mean Precipitation','value':'meanprecipitation'},{'label':'Max Precipitation','value':'maxprecipitation'}]
+    return dropdownoptions
+
+def generate_historical_data(client,state,county,metric,dbname='USweather',collectionname='countystate'):
+    db = client.get_database(dbname)
+    df = pd.DataFrame(list(db[collectionname].find({'state_fullname':state,'County':county})))
+    df.drop(['_id'], axis=1,inplace=True)
+    df.drop_duplicates(keep='last', inplace=True)
+    latitude=df.iloc[0]['Latitude']
+    longitude=df.iloc[0]['Longitude']
+    df2=pd.DataFrame(list(db[metric].find({'Latitude':latitude,'Longitude':longitude})))
+    df2.drop(['_id'], axis=1,inplace=True)
+    df2.drop_duplicates(keep='last', inplace=True)
+    return df2
+    
+def get_missing_years(df,timecolumn,start=1997,end=2027):
+    existing_year=df[timecolumn].tolist()
+    fullyear=[x for x in range(start,end+1)]
+    missing_year=list(set(fullyear) - set(existing_year))
+    return missing_year
+
+def create_time_series(dff,x_col,y_col,title, axis_type='Linear'):
+    return {
+        'data': [go.Scatter(
+            x=dff[x_col],
+            y=dff[y_col],
+            mode='lines+markers'
+        )],
+        'layout': {
+            'height': 225,
+            'margin': {'l': 20, 'b': 30, 'r': 10, 't': 10},
+            'annotations': [{
+                'x': 0, 'y': 0.85, 'xanchor': 'left', 'yanchor': 'bottom',
+                'xref': 'paper', 'yref': 'paper', 'showarrow': False,
+                'align': 'left', 'bgcolor': 'rgba(255, 255, 255, 0.5)',
+                'text': title
+            }],
+            'yaxis': {'type': 'linear' if axis_type == 'Linear' else 'log'},
+            'xaxis': {'showgrid': False}
+        }
+    }
+
+if __name__=='__main__':
+    client=mongoclient('localhost')
+    df=generate_historical_data(client,'California','Imperial','meanprecipitation')
+    print(get_missing_years(df,'Year'))
+
