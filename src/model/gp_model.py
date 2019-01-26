@@ -65,7 +65,7 @@ def use_pretrain(name):
 		model: pretrained model
 	"""
 
-	model = load("./gp_model/{}".format(name))
+	model = load("./gp_model/{}.joblib".format(name))
 
 	return model
 
