@@ -73,16 +73,22 @@ dash_app2.layout = html.Div(children=[
     html.Div('State Name'),
     dcc.Dropdown(
         id='state-name',
-        options=ml.generate_states(dbclient),
+        options=ml.get_column_unique(dbclient),
         value='State Name'
     ),
     html.Div('County Name'),
-        dcc.Dropdown(
+    dcc.Dropdown(
         id='county-name',
         options=[{'value':'Table','label':'Table'}],
         value='County Name'
     ),
-    html.Div(id='my-table')
+    html.Div('Weather Metrics'),
+    dcc.Dropdown(
+        id='weather-metric',
+        options=ml.generate_metrics(),
+        value='Weather metric'
+    ),
+    html.Div([dcc.Graph(id='ts')])
 ])
 
 @dash_app2.callback(
@@ -91,10 +97,21 @@ dash_app2.layout = html.Div(children=[
 )
 def update_county_name(state):
     try:
-        county=ml.generate_county(dbclient,state)
+        county=ml.get_depedent_column(dbclient,state)
         return county
     except:
         return html.Div('Invalid county')
+
+@dash_app2.callback(
+    depend.Output('ts', 'figure'),
+    [depend.Input('state-name', 'value'),
+     depend.Input('county-name', 'value'),
+     depend.Input('weather-metric', 'value')])
+def predict_time(state,county,metric):
+    
+    title = '{} of {} in {}'.format(metric,county,state)
+    return ml.create_time_series(dff,'Year',metric,title)
+
 
 # Setting up the Flask server and applications
 
