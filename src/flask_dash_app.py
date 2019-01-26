@@ -25,10 +25,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Setting up flask server and dash applications
 server = flask.Flask(__name__)
-dash_app1 = Dash(__name__, server = server, url_base_pathname='/dashboard/', external_stylesheets=external_stylesheets )
+dash_app1 = Dash(__name__, server = server, url_base_pathname='/database/', external_stylesheets=external_stylesheets )
 dash_app2 = Dash(__name__, server = server, url_base_pathname='/reports/')
-
-dash_app2.layout = html.Div([html.H1('Hi there, I am app2 for reports')])
 
 dash_app1.layout = html.Div(children=[
     html.Div('Database Name'),
@@ -70,14 +68,17 @@ def update_output_div(database,table):
     except:
         return html.Div('Invalid table')
 
+# Application 2
+dash_app2.layout = html.Div([html.H1('Hi there, I am app2 for reports')])
+
 # Setting up the Flask server and applications
 
 @server.route('/')
 @server.route('/hello')
 def hello():
-    return 'hello world!'
+    return 'US Weather Forecast'
 
-@server.route('/dashboard')
+@server.route('/database')
 def render_dashboard():
     return flask.redirect('/dash1')
 
