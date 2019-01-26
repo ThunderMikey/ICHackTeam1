@@ -1,6 +1,6 @@
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Matern
-from joblib import dump, load
+import pickle
 import pandas as pd
 
 # define model
@@ -26,7 +26,7 @@ def train_gp_model(X, y, data_type, alpha = 1e-10):
 						normalize_y=False, copy_X_train=False, random_state=None).fit(X, y)
 
 	# save our regression model
-	dump(gp_model, "./saved_gp_models/{}.joblib".format(data_name))
+	pickle.dump(gp_model, open("./saved_gp_models/{}.joblib".format(data_name), 'wb'))
 	
 	return gp_model
 
@@ -61,6 +61,6 @@ def use_pretrain(name):
 		model: pretrained model
 	"""
 
-	model = load("./saved_gp_models/{}.joblib".format(name))
+	model = load(open("./saved_gp_models/{}.joblib".format(name), "rb"))
 
 	return model
