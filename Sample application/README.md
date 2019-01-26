@@ -81,4 +81,4 @@ To-Do-List is mini-project made with Flask and MongoDB. Dockerfile is also avail
 ### Thanks to Twitter for emoji support with Twemoji :
 	Twitter Open Source : https://github.com/twitter/twemoji
 
-Made with ❤️ from Nepal
+

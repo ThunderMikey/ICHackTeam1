@@ -50,4 +50,21 @@ def mongo2csv(client,dbname,collectionname,filepath):
     except:
         print('Record not found',collectionname)
     client.close()
-    return df 
+    return df
+
+# label value dictionary of all database
+def dropdown_get_all_database(client):
+    dbs=client.list_database_names()
+    try:
+        dbs.remove('admin')
+        dbs.remove('config')
+        dbs.remove('local')
+    except:
+        print('Error in database definition')
+    dropdownoptions=[{'label':x,'value':x} for x in dbs]
+    return dropdownoptions
+
+def dropdown_get_all_table(client,dbname):
+    tables=client[dbname].collection_names()
+    dropdownoptions=[{'label':x,'value':x} for x in tables]
+    return dropdownoptions   
