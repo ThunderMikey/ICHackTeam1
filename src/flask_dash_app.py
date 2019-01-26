@@ -76,7 +76,7 @@ dash_app2.layout = html.Div([html.H1('Hi there, I am app2 for reports')])
 @server.route('/')
 @server.route('/hello')
 def hello():
-    return 'US Weather Forecast'
+    return flask.render_template('mainpage.html')
 
 @server.route('/database')
 def render_dashboard():
