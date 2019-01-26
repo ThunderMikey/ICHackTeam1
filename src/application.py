@@ -12,6 +12,7 @@ import dash_table
 from pymongo import MongoClient 
 import mongodbutil as ml
 import model
+import pandas as pd
 
 # Prepare static data to load into application 
 # Realtime data please refer to https://dash.plot.ly/live-updates
@@ -26,7 +27,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 # Setting up flask server and dash applications
 server = flask.Flask(__name__)
 dash_app1 = Dash(__name__, server = server, url_base_pathname='/database/', external_stylesheets=external_stylesheets )
-dash_app2 = Dash(__name__, server = server, url_base_pathname='/reports/')
+dash_app2 = Dash(__name__, server = server, url_base_pathname='/time/')
+dash_app3 = Dash(__name__, server = server, url_base_pathname='/space/')
 
 dash_app1.layout = html.Div(children=[
     html.Div('Database Name'),
@@ -108,10 +110,18 @@ def update_county_name(state):
      depend.Input('county-name', 'value'),
      depend.Input('weather-metric', 'value')])
 def predict_time(state,county,metric):
-    
+    hist=ml.generate_historical_data(dbclient,state,county,metric)
+    data=hist['Historical']
+    missingdf=pd.DataFrame()
+    missingdf['Latitude']=hist['Lat']
+    missingdf['Longitude']=hist['Long']
+    missingdf['Year']=ml.get_missing_years(data,'Year')
+    #forecastmodel=model.gp_model.use_pretrain('')
+    #forecast=model.gp_model.gp_prediction(missing,forecasemodel)
     title = '{} of {} in {}'.format(metric,county,state)
-    return ml.create_time_series(dff,'Year',metric,title)
+    return ml.create_time_series(data,'Year',metric,title)
 
+dash_app3.layout=html.Div('Space Models')
 
 # Setting up the Flask server and applications
 
@@ -125,13 +135,18 @@ def render_dashboard():
     return flask.redirect('/dash1')
 
 
-@server.route('/reports')
-def render_reports():
+@server.route('/time')
+def render_time():
     return flask.redirect('/dash2')
+
+@server.route('/space')
+def render_space():
+    return flask.redirect('/dash3')
 
 app = DispatcherMiddleware(server, {
     '/dash1': dash_app1.server,
-    '/dash2': dash_app2.server
+    '/dash2': dash_app2.server,
+    '/dash3': dash_app3.server
 })
 
 if __name__ == "__main__":

@@ -108,7 +108,7 @@ def generate_historical_data(client,state,county,metric,dbname='USweather',colle
     df2=pd.DataFrame(list(db[metric].find({'Latitude':latitude,'Longitude':longitude})))
     df2.drop(['_id'], axis=1,inplace=True)
     df2.drop_duplicates(keep='last', inplace=True)
-    return df2
+    return {'Historical':df2,'Lat':latitude,'Long':longitude}
     
 def get_missing_years(df,timecolumn,start=1997,end=2027):
     existing_year=df[timecolumn].tolist()
@@ -125,7 +125,7 @@ def create_time_series(dff,x_col,y_col,title, axis_type='Linear'):
         )],
         'layout': {
             'height': 225,
-            'margin': {'l': 20, 'b': 30, 'r': 10, 't': 10},
+            'margin': {'l': 30, 'b': 35, 'r': 20, 't': 15},
             'annotations': [{
                 'x': 0, 'y': 0.85, 'xanchor': 'left', 'yanchor': 'bottom',
                 'xref': 'paper', 'yref': 'paper', 'showarrow': False,
