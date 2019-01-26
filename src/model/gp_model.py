@@ -4,7 +4,7 @@ from joblib import dump, load
 import pandas as pd
 
 # define model
-def train_gp_model(X, y, kernel, alpha):
+def train_gp_model(X, y, kernel, alpha = 1e-10):
 	"""define our kriging model
 
 	input:
@@ -26,7 +26,7 @@ def train_gp_model(X, y, kernel, alpha):
 
 	# alpha is jitter added to inverting the covariance matrix
 	# optimisier is the optmisier
-	gp_model = GaussianProcessRegressor(kernel=kernel, alpha=1e-10, optimizer="fmin_l_bfgs_b", n_restarts_optimizer=0, 
+	gp_model = GaussianProcessRegressor(kernel=kernel, alpha=alpha, optimizer="fmin_l_bfgs_b", n_restarts_optimizer=0, 
 						normalize_y=False, copy_X_train=True, random_state=None).fit(X, y)
 
 	# save our regression model
@@ -65,9 +65,6 @@ def use_pretrain(name):
 		model: pretrained model
 	"""
 
-	model = load("./gp_model/{}.joblib".format(name))
+	model = load("./saved_gp_models/{}.joblib".format(name))
 
 	return model
-
-
-
