@@ -1,13 +1,13 @@
 # forecasts spacetime temperatures
 library(dbarts)
 
-trainData <- read.csv("../data/max_temperature.csv", sep="\t")
+trainData <- read.csv("../data/max_precipitation.csv", sep="\t")
 trainData <- trainData[trainData$Year > 2005, ]
 dim <- 3
 
-testData <- cbind(Year = 2018, trainData[,c(2,3)])
+testData <- cbind(Year = 2018, trainData[trainData$Year == 2006,c(2,3)])
 for (year in 2019:2025) {
-  testData <- rbind(cbind(Year=year, trainData[,c(2,3)]), testData)
+  testData <- rbind(cbind(Year=year, trainData[trainData$Year == 2006,c(2,3)]), testData)
 }
 
 model <- bart(trainData[,1:dim], trainData[,dim+1], keeptrees=TRUE, keepevery=20L, nskip=1000, ndpost=1000, ntree=50, k = 2)
@@ -20,10 +20,6 @@ predictions <- data.frame(
     "Longitude" = c(testData[, 3]),
     "prediction"= y_pred
 )
-colnames(predictions) <- c("Year", "Latitude", "Longitude", "maxtemperature")
+colnames(predictions) <- c("Year", "Latitude", "Longitude", "maxprecipitation")
 
-write.csv("../data/prediction_maxtemperature.csv", x = predictions)
-
-data = read.csv("../data/prediction_maxprecipitation.csv")
-write.csv(data, "../data/prediction_maxprecipitation.csv", sep = "\t")
-write.
+write.csv("../data/prediction_maxprecipitation.csv", x = predictions)
