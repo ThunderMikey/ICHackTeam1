@@ -155,7 +155,7 @@ def generate_spatial(df,graphtitle,metric):
     data = [ dict(
             type = 'scattergeo',
             locationmode = 'USA-states',
-            lon = df['Longitude'],
+            lon = -df['Longitude'],
             lat = df['Latitude'],
             text = df['text'],
             mode = 'markers',
