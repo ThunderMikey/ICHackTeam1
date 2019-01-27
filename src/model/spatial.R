@@ -24,5 +24,18 @@ predictions <- data.frame(
 )
 colnames(predictions) <- c("Year", "Latitude", "Longitude", "maxtemperature")
 
-write.csv("../data/prediction_maxtemperature_time.csv", x = predictions)
+
+data <- read.csv("../data/prediction_maxprecipitation.csv", sep="\t")
+data <- data[data$Year== 2020, -c(1)]
+
+df2 <- read.csv("../data/prediction_maxtemperature.csv", sep="\t")
+df2 <- df2[df2$Year== 2020, -c(1)]
+data$maxtemperature <- df2$maxtemperature
+
+df2 <- read.csv("../data/prediction_mintemperature.csv", sep="\t")
+df2 <- df2[df2$Year== 2020, -c(1)]
+
+data$mintemperature <- df2$mintemperature
+
+write.csv("../data/prediction_space.csv", x = data, row.names = FALSE)
 
