@@ -29,6 +29,7 @@ server = flask.Flask(__name__)
 dash_app1 = Dash(__name__, server = server, url_base_pathname='/database/', external_stylesheets=external_stylesheets )
 dash_app2 = Dash(__name__, server = server, url_base_pathname='/time/', external_stylesheets=external_stylesheets)
 dash_app3 = Dash(__name__, server = server, url_base_pathname='/space/', external_stylesheets=external_stylesheets)
+dash_app4 = Dash(__name__, server = server, url_base_pathname='/spacetime/', external_stylesheets=external_stylesheets)
 
 dash_app1.layout = html.Div(children=[
     html.Div('Database Name'),
@@ -148,6 +149,33 @@ def predict_space(year,metric):
         return ['No data in Year {}'.format(year)]
     return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,df,year,metric))]
 
+dash_app4.layout= html.Div(children=[
+    html.Div('Year'),
+    dcc.Dropdown(
+        id='year-name',
+        options=ml.get_year(),
+        value='Year'
+    ),
+    html.Div('Weather Metrics'),
+    dcc.Dropdown(
+        id='weather-metric',
+        options=ml.generate_metrics(),
+        value='Weather metric'
+    ),
+    html.Div(id='space'),
+    html.Label(['Return ', html.A('mainpage', href='/')])
+])
+
+@dash_app4.callback(
+    depend.Output('space', 'children'),
+    [depend.Input('year-name', 'value'),
+     depend.Input('weather-metric', 'value')])
+def predict_space(year,metric):
+    df=ml.download_space_series(dbclient,year,metric)
+    if df.size<1:
+        return ['No data in Year {}'.format(year)]
+    return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,df,year,metric))]
+
 # Setting up the Flask server and applications
 
 @server.route('/')
@@ -168,12 +196,16 @@ def render_time():
 def render_space():
     return flask.redirect('/dash3')
 
+@server.route('/spacetime')
+def render_spacetime():
+    return flask.redirect('/dash4')
+
 app = DispatcherMiddleware(server, {
     '/dash1': dash_app1.server,
     '/dash2': dash_app2.server,
-    '/dash3': dash_app3.server
+    '/dash3': dash_app3.server,
+    '/dash4': dash_app4.server
 })
 
 if __name__ == "__main__":
-    
     run_simple('127.0.0.1', 8080, app, use_reloader=True, use_debugger=True)
