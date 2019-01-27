@@ -39,3 +39,11 @@ g-table-intro h4 {
 .subpage-heading {
   text-align: center;
 }
+
+.gh-invite {
+  background-image: linear-gradient(orange 30%, purple 100%);
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
