@@ -1,7 +1,7 @@
 # forecasts spacetime temperatures
 library(dbarts)
 
-trainData <- read.csv("../data/max_precipitation.csv", sep="\t")
+trainData <- read.csv("../data/max_temperature.csv", sep="\t")
 trainData <- trainData[trainData$Year > 2005, ]
 dim <- 3
 
@@ -20,6 +20,10 @@ predictions <- data.frame(
     "Longitude" = c(testData[, 3]),
     "prediction"= y_pred
 )
-colnames(predictions) <- c("Year", "Latitude", "Longitude", "maxprecipitation")
+colnames(predictions) <- c("Year", "Latitude", "Longitude", "maxtemperature")
 
-write.csv("../data/prediction_maxprecipitation.csv", x = predictions)
+write.csv("../data/prediction_maxtemperature.csv", x = predictions)
+
+data = read.csv("../data/prediction_maxprecipitation.csv")
+write.csv(data, "../data/prediction_maxprecipitation.csv", sep = "\t")
+write.
