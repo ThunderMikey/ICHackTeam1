@@ -14,7 +14,7 @@ ml.df2mongo(dbclient,'USweather','maxprecipitation',df3)
 df5=pd.read_csv('data/countystate.csv',sep='\t')
 ml.df2mongo(dbclient,'USweather','countystate',df5)
 
-df1=pd.read_csv('./data/prediction_mintemperature_time.csv',sep=',')
+df1=pd.read_csv('./data/prediction_mintemperature_time.csv',sep='\t')
 ml.df2mongo(dbclient,'USweather','mintemperature',df1)
 df2=pd.read_csv('./data/prediction_maxtemperature_time.csv',sep=',')
 ml.df2mongo(dbclient,'USweather','maxtemperature',df2)
