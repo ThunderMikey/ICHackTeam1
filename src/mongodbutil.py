@@ -220,7 +220,7 @@ def generate_spatial(df,graphtitle,metric):
 
 def download_space_series(client,year,metric,dbname='USweather'):
     db = client.get_database(dbname)
-    if metric!='Mean':
+    if year!='Mean':
         df = pd.DataFrame(list(db[metric].find({'Year':year})))
         try:
             df.drop(['_id'], axis=1,inplace=True)
