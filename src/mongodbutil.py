@@ -224,7 +224,8 @@ def create_space_series(client,year,metric,dbname='USweather'):
         df.drop(['_id'], axis=1,inplace=True)
         df.drop_duplicates(keep='last', inplace=True)
     except:
-        print('Pass')
+        if df.size<1:
+            return ['No data in Year {}'.format(year)]
     graphtitle=generate_title2(metric,year)
     countydf=mongo2df(client,dbname,'countystate')
     mergedf=df.merge(countydf,how='left',left_on=['Latitude','Longitude'],right_on=['Latitude','Longitude'])
