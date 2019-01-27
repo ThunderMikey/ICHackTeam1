@@ -16,7 +16,8 @@ if __name__ == "__main__":
         data_csv = pd.read_csv("./data/{}.csv".format(data_name), sep = "\t")
 
         # only take parts of the data to train
-        data_csv = data_csv[data_csv["Year"] > 2015]
+        data_csv = data_csv[data_csv["Year"] == 2015]
+        print("Shape", data_csv.shape)
 
         # parse data name for model reading
         data_name = data_name.split("_")
