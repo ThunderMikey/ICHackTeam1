@@ -97,6 +97,17 @@ def get_depedent_column(client,state,dbname='USweather',collectioname='countysta
 def generate_metrics():
     dropdownoptions=[{'label':'Max Temperature','value':'maxtemperature'},{'label':'Min Temperature','value':'mintemperature'},{'label':'Mean Precipitation','value':'meanprecipitation'},{'label':'Max Precipitation','value':'maxprecipitation'}]
     return dropdownoptions
+    
+def generate_title(metric,county,state):
+    mapping={'maxtemperature':'Max Temperature','mintemperature':'Min Temperature','meanprecipitation':'Mean Precipitation','maxprecipitation':'Max Precipitation'}
+    newmetric=mapping[metric]
+    title='{} of {} in {}'.format(newmetric,county,state)
+    return title
+
+def get_year(start=1997,end=2027):
+    dropdownoptions=[{'label':x,'value':x} for x in range(start,end+1)]
+    return dropdownoptions
+
 
 def generate_historical_data(client,state,county,metric,dbname='USweather',collectionname='countystate'):
     db = client.get_database(dbname)
@@ -108,7 +119,7 @@ def generate_historical_data(client,state,county,metric,dbname='USweather',colle
     df2=pd.DataFrame(list(db[metric].find({'Latitude':latitude,'Longitude':longitude})))
     df2.drop(['_id'], axis=1,inplace=True)
     df2.drop_duplicates(keep='last', inplace=True)
-    return df2
+    return {'Historical':df2,'Lat':latitude,'Long':longitude}
     
 def get_missing_years(df,timecolumn,start=1997,end=2027):
     existing_year=df[timecolumn].tolist()
@@ -125,7 +136,7 @@ def create_time_series(dff,x_col,y_col,title, axis_type='Linear'):
         )],
         'layout': {
             'height': 225,
-            'margin': {'l': 20, 'b': 30, 'r': 10, 't': 10},
+            'margin': {'l': 30, 'b': 35, 'r': 20, 't': 15},
             'annotations': [{
                 'x': 0, 'y': 0.85, 'xanchor': 'left', 'yanchor': 'bottom',
                 'xref': 'paper', 'yref': 'paper', 'showarrow': False,
@@ -136,6 +147,61 @@ def create_time_series(dff,x_col,y_col,title, axis_type='Linear'):
             'xaxis': {'showgrid': False}
         }
     }
+
+def generate_spatial(df,graphtitle,metric):
+    df['text'] = metric+' '+df[metric].astype(str)
+    scl = [ [0,"rgb(5, 10, 172)"],[0.35,"rgb(40, 60, 190)"],[0.5,"rgb(70, 100, 245)"],
+    [0.6,"rgb(90, 120, 245)"],[0.7,"rgb(106, 137, 247)"],[1,"rgb(220, 220, 220)"] ]
+    data = [ dict(
+            type = 'scattergeo',
+            locationmode = 'USA-states',
+            lon = -df['Longitude'],
+            lat = df['Latitude'],
+            text = df['text'],
+            mode = 'markers',
+            marker = dict(
+                size = 8,
+                opacity = 0.8,
+                reversescale = True,
+                autocolorscale = False,
+                symbol = 'square',
+                line = dict(
+                    width=1,
+                    color='rgba(102, 102, 102)'
+                ),
+                colorscale = scl,
+                cmin = df[metric].min(),
+                color = df[metric],
+                cmax = df[metric].max(),
+                colorbar=dict(
+                    title=metric
+                )
+            ))]
+
+    layout = dict(
+            title = graphtitle,
+            colorbar = True,
+            geo = dict(
+                scope='usa',
+                projection=dict( type='albers usa' ),
+                showland = True,
+                landcolor = "rgb(250, 250, 250)",
+                subunitcolor = "rgb(217, 217, 217)",
+                countrycolor = "rgb(217, 217, 217)",
+                countrywidth = 0.5,
+                subunitwidth = 0.5
+            ),
+        )
+    fig = dict(data=data,layout=layout) 
+    return fig
+
+def create_space_series(client,year,metric,dbname='USweather'):
+    db = client.get_database(dbname)
+    df = pd.DataFrame(list(db[metric].find({'Year':year})))
+    graphtitle='{} of US in Year {}'.format(metric,year)
+    return generate_spatial(df,graphtitle,metric)
+
+
 
 if __name__=='__main__':
     client=mongoclient('localhost')
