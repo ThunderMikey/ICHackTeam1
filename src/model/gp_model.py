@@ -1,5 +1,5 @@
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF
+from sklearn.gaussian_process.kernels import Matern
 import pickle
 import pandas as pd
 
@@ -17,15 +17,15 @@ def train_gp_model(X, y, data_name, alpha = 1e-10):
 		gp_model: Gaussian process model fitted
 	"""
 	# define gp kernel
-	kernel = RBF
+	kernel = Matern()
 
 	# alpha is jitter added to inverting the covariance matrix
 	# optimisier is the optmisier
 	gp_model = GaussianProcessRegressor(kernel=kernel, alpha=alpha, optimizer="fmin_l_bfgs_b", n_restarts_optimizer=0, 
-						normalize_y=False, copy_X_train=False, random_state=None).fit(X, y)
+						normalize_y=False, copy_X_train=True, random_state=None).fit(X, y)
 
 	# save our regression model
-	pickle.dump(gp_model, open("./saved_gp_models/{}.joblib".format(data_name), 'wb'))
+	pickle.dump(gp_model, open("./saved_gp_models/spatiotemporal{}.joblib".format(data_name), 'wb'))
 	
 	return gp_model
 

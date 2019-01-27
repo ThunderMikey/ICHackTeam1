@@ -34,15 +34,22 @@
     <h3>Temporal Forecasting<a href='/time'><i class="fas fa-door-open"></i></a></h3>
 
     <p>
-    We use <span class="math inline">\( \mbox{AR}(p), p^{th} \)</span> order autoregressive time series models to model changes. Check out our models  <br>
+    We use <span class="math inline">\( \mbox{AR}(p), p^{th} \)</span> order autoregressive 
+    time series models to model changes. Check out our models by clicking on the link above! <br>
     </p>
 
     <h3>Spatial Forecasting<a href='/space'><i class="fas fa-door-open"></i></a></h3>
     <p>
-    and something else <br>
+    For spatial prediction we opted for a Bayesian Additive Regression Tree (BART), where we model a sum of trees model
+    <span class="math inline">\( y = \sum_i f(\cdot;T_j,M_j) \)</span> <br> (Chipman et al., 2018). To implement this, we 
+    use Markov chain Monte Carlo to sample from the posterior and obtained a posterior predictive mean using Monte Carlo
+    integration.
     </p>
 
     <h3>Spatiotemporal Forecasting!</h3>
+    <p>Spatiotemporal modelling is a relatively new field of statistical study, where we are not only interested in the evolution of
+      time or space as a separate entity, but together as a bivariate covariate.  
+    </p>
 
     <p>Finally check out our Github repo <a href='https://github.com/harrisonzhu508/ICHackTeam1'>here!</a>  </p>
 </div>

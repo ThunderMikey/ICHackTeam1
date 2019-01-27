@@ -2,7 +2,7 @@ library(forecast)
 library(tseries)
 library(doParallel)
 
-trainData <- read.csv("../data/max_precipitation.csv", sep="\t")
+trainData <- read.csv("../data/min_temperature.csv", sep="\t")
 num_obs <- length(trainData[trainData["Year"] == 2006,1])
 
 year2006_data <- trainData[trainData["Year"] == 2006,]
@@ -17,7 +17,7 @@ predictions <- foreach(i=1:num_obs, .combine = rbind, .packages = c("forecast", 
   
   index <- intersect(which(c(trainData[,c(2)] == latitude)), which(c(trainData[,c(3)] == longitude)))
   #fit AR2 models
-  fit <- arima(trainData[index, 4], order = c(2,0,0))
+  fit <- arima(trainData[index, 4], order = c(1,0,0))
   y_pred <- forecast(fit, h = 8)$mean
   pred_val <- c(y_pred[1], latitude, longitude, 2018)
   
@@ -30,7 +30,7 @@ predictions <- foreach(i=1:num_obs, .combine = rbind, .packages = c("forecast", 
 stopCluster(cl)
 
 predictions <- data.frame(predictions)
-colnames(predictions) <- c("maxprecipitation", "Latitude", "Longitude", "Year")
+colnames(predictions) <- c("mintemperature", "Latitude", "Longitude", "Year")
 
-write.csv("../data/prediction_maxprecipitation_time.csv", x = predictions, row.names=FALSE)
+write.csv("../data/prediction_mintemperature_time.csv", x = predictions, row.names=FALSE)
 
