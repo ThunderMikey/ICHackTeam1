@@ -32,6 +32,13 @@ dash_app2 = Dash(__name__, server = server, url_base_pathname='/time/', external
 dash_app3 = Dash(__name__, server = server, url_base_pathname='/space/', external_stylesheets=external_stylesheets)
 dash_app4 = Dash(__name__, server = server, url_base_pathname='/spacetime/', external_stylesheets=external_stylesheets)
 
+html_return_home = html.Label([
+        html.I(className="fas fa-home"),
+        'Return ',
+        html.A('mainpage', href='/')
+    ],
+    className='return-home')
+
 dash_app1.layout = html.Div(children=[
     html.Div('Database Name'),
     dcc.Dropdown(
@@ -94,7 +101,7 @@ dash_app2.layout = html.Div(children=[
         value='Weather metric'
     ),
     html.Div(id='time'),
-    html.Label(['Return ', html.A('mainpage', href='/')])
+    html_return_home
 ])
 
 @dash_app2.callback(
@@ -139,7 +146,7 @@ dash_app3.layout= html.Div(children=[
         value='Weather metric'
     ),
     html.Div(id='space'),
-    html.Label(['Return ', html.A('mainpage', href='/')])
+    html_return_home
 ])
 
 @dash_app3.callback(
@@ -167,7 +174,7 @@ dash_app4.layout= html.Div(children=[
         value='Weather metric'
     ),
     html.Div(id='space'),
-    html.Label(['Return ', html.A('mainpage', href='/')])
+    html_return_home
 ])
 
 @dash_app4.callback(
