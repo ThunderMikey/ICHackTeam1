@@ -114,7 +114,7 @@ def predict_time(state,county,metric):
     hist=ml.generate_historical_data(dbclient,state,county,metric)
     data=hist['Historical']
     if data.size<1:
-        return['No {} data for {} in {}'.format(metric,county,state)]
+        return['No data for {} in {}'.format(county,state)]
     if metric=='maxtemperature' or metric=='mintemperature':
         data[metric]=data[metric].astype(float)-273.15
     missingdf=pd.DataFrame()
@@ -148,7 +148,7 @@ dash_app3.layout= html.Div(children=[
     [depend.Input('year-name', 'value'),
      depend.Input('weather-metric', 'value')])
 def predict_space(year,metric):
-    return [dcc.Graph(id='space',figure=ml.create_space_series(dbclient,year,metric))]
+    return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,year,metric))]
 
 # Setting up the Flask server and applications
 
