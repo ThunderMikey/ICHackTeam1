@@ -22,7 +22,8 @@ dbhost='localhost'
 dbclient=ml.mongoclient(dbhost)
 
 # CSS 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [#'https://codepen.io/chriddyp/pen/bWLwgP.css',
+        '/static/main.css']
 
 # Setting up flask server and dash applications
 server = flask.Flask(__name__)
@@ -73,13 +74,14 @@ def update_output_div(database,table):
 
 # Application 2
 dash_app2.layout = html.Div(children=[
-    html.Div('State Name'),
+    html.H1('Historical Data', className='subpage-heading'),
+    html.H2('State Name'),
     dcc.Dropdown(
         id='state-name',
         options=ml.get_column_unique(dbclient),
         value='State Name'
     ),
-    html.Div('County Name'),
+    html.H2('County Name'),
     dcc.Dropdown(
         id='county-name',
         options=[{'value':'Table','label':'Table'}],
@@ -153,13 +155,13 @@ dash_app4.layout= html.Div(children=[
     html.Div('Year'),
     dcc.Dropdown(
         id='year-name',
-        options=ml.get_year(),
+        options=ml.get_year2(),
         value='Year'
     ),
     html.Div('Weather Metrics'),
     dcc.Dropdown(
         id='weather-metric',
-        options=ml.generate_metrics(),
+        options=ml.generate_metrics2(),
         value='Weather metric'
     ),
     html.Div(id='space'),
@@ -170,8 +172,8 @@ dash_app4.layout= html.Div(children=[
     depend.Output('space', 'children'),
     [depend.Input('year-name', 'value'),
      depend.Input('weather-metric', 'value')])
-def predict_space(year,metric):
-    df=ml.download_space_series(dbclient,year,metric)
+def predict_spacetime(year,metric):
+    df=ml.download_space_series2(dbclient,year,metric)
     if df.size<1:
         return ['No data in Year {}'.format(year)]
     return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,df,year,metric))]
