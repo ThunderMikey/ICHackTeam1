@@ -172,7 +172,7 @@ def generate_spatial(df,graphtitle,metric):
     [0.5555555555555556, 'rgb(224,243,248)'], [0.6666666666666666, 'rgb(171,217,233)'], 
     [0.7777777777777778, 'rgb(116,173,209)'],
      [0.8888888888888888, 'rgb(69,117,180)'], [1.0, 'rgb(49,54,149)']]
-    if metric=='maxtemperature' or metric=='mintemprature':
+    if metric=='maxtemperature' or metric=='mintemperature':
         df[metric]=df[metric]-273.15
     data = [ dict(
             type = 'scattergeo',
@@ -220,8 +220,11 @@ def generate_spatial(df,graphtitle,metric):
 def create_space_series(client,year,metric,dbname='USweather'):
     db = client.get_database(dbname)
     df = pd.DataFrame(list(db[metric].find({'Year':year})))
-    df.drop(['_id'], axis=1,inplace=True)
-    df.drop_duplicates(keep='last', inplace=True)
+    try:
+        df.drop(['_id'], axis=1,inplace=True)
+        df.drop_duplicates(keep='last', inplace=True)
+    except:
+        print('Pass')
     graphtitle=generate_title2(metric,year)
     countydf=mongo2df(client,dbname,'countystate')
     mergedf=df.merge(countydf,how='left',left_on=['Latitude','Longitude'],right_on=['Latitude','Longitude'])
