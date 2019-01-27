@@ -116,6 +116,14 @@ def get_year(start=1997,end=2017):
     dropdownoptions.append({'label':'Mean','value':'Mean'})
     return dropdownoptions
 
+def get_year2(start=1997,end=2027):
+    dropdownoptions=[{'label':x,'value':x} for x in range(start,end+1)]
+    return dropdownoptions
+
+def generate_metrics2():
+    dropdownoptions=[{'label':'Max Temperature','value':'maxtemperature'},{'label':'Min Temperature','value':'mintemperature'},{'label':'Max Precipitation','value':'maxprecipitation'}]
+    return dropdownoptions
+
 
 def generate_historical_data(client,state,county,metric,dbname='USweather',collectionname='countystate'):
     try:
