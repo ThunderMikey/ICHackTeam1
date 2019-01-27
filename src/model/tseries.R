@@ -1,16 +1,12 @@
 # forecasts spacetime temperatures
 library(dbarts)
 
-
-
-
 trainData <- read.csv("../data/max_precipitation.csv", sep="\t")
 trainData <- trainData[trainData$Year > 2005, ]
 dim <- 3
 
-
 testData <- cbind(Year = 2018, trainData[,c(2,3)])
-for (year in 2019:2020) {
+for (year in 2019:2025) {
   testData <- rbind(cbind(Year=year, trainData[,c(2,3)]), testData)
 }
 
