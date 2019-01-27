@@ -90,7 +90,8 @@ dash_app2.layout = html.Div(children=[
         options=ml.generate_metrics(),
         value='Weather metric'
     ),
-    html.Div([dcc.Graph(id='ts')])
+    html.Div([dcc.Graph(id='ts')]),
+    html.Label(['Return ', html.A('mainpage', href='/')])
 ])
 
 @dash_app2.callback(
@@ -112,6 +113,8 @@ def update_county_name(state):
 def predict_time(state,county,metric):
     hist=ml.generate_historical_data(dbclient,state,county,metric)
     data=hist['Historical']
+    if metric=='maxtemperature' or metric=='mintemperature':
+        data[metric]=data[metric].astype(float)-273.15
     missingdf=pd.DataFrame()
     missingdf['Latitude']=hist['Lat']
     missingdf['Longitude']=hist['Long']
@@ -134,7 +137,8 @@ dash_app3.layout= html.Div(children=[
         options=ml.generate_metrics(),
         value='Weather metric'
     ),
-    html.Div([dcc.Graph(id='space')])
+    html.Div([dcc.Graph(id='space')]),
+    html.Label(['Return ', html.A('mainpage', href='/')])
 ])
 
 @dash_app3.callback(

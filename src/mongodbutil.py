@@ -19,7 +19,6 @@ def csv2mongo(client,dbname,collectionname,filename):
         print('File not uploaded ', filename)
 
 def df2mongo(client,dbname,collectionname,df):
-
     try:
         db = client.get_database(dbname)
         db_cm = db[collectionname]
@@ -95,13 +94,19 @@ def get_depedent_column(client,state,dbname='USweather',collectioname='countysta
     return dropdownoptions
 
 def generate_metrics():
-    dropdownoptions=[{'label':'Max Temperature','value':'maxtemperature'},{'label':'Min Temperature','value':'mintemperature'},{'label':'Mean Precipitation','value':'meanprecipitation'},{'label':'Max Precipitation','value':'maxprecipitation'}]
+    dropdownoptions=[{'label':'Max Temperature','value':'maxtemperature'},{'label':'Min Temperature','value':'mintemperature'},{'label':'Max Precipitation','value':'maxprecipitation'}]
     return dropdownoptions
     
 def generate_title(metric,county,state):
     mapping={'maxtemperature':'Max Temperature','mintemperature':'Min Temperature','meanprecipitation':'Mean Precipitation','maxprecipitation':'Max Precipitation'}
     newmetric=mapping[metric]
     title='{} of {} in {}'.format(newmetric,county,state)
+    return title
+
+def generate_title2(metric,year):
+    mapping={'maxtemperature':'Max Temperature','mintemperature':'Min Temperature','meanprecipitation':'Mean Precipitation','maxprecipitation':'Max Precipitation'}
+    newmetric=mapping[metric]
+    title='{} of US in Year {}'.format(newmetric,year)
     return title
 
 def get_year(start=1997,end=2027):
@@ -144,23 +149,37 @@ def create_time_series(dff,x_col,y_col,title, axis_type='Linear'):
                 'text': title
             }],
             'yaxis': {'type': 'linear' if axis_type == 'Linear' else 'log'},
-            'xaxis': {'showgrid': False}
+            'xaxis': {'showgrid': True}
         }
     }
 
+def addunit_metric(metric):
+    if metric=='maxprecipitation':
+        newmetric='Max Precipitation (mm)'
+    if metric=='maxtemperature':
+        newmetric='Max Temperature (C)'
+    if metric=='mintemperature':
+        newmetric='Min Temperature (C)'
+    return newmetric
+
 def generate_spatial(df,graphtitle,metric):
-    df['text'] = metric+' '+df[metric].astype(str)
-    scl = [ [0,"rgb(5, 10, 172)"],[0.35,"rgb(40, 60, 190)"],[0.5,"rgb(70, 100, 245)"],
-    [0.6,"rgb(90, 120, 245)"],[0.7,"rgb(106, 137, 247)"],[1,"rgb(220, 220, 220)"] ]
+    df['text'] = df['state_fullname']+' '+df['County']+' '+df[metric].astype(str)
+    scl=[[0.0, 'rgb(165,0,38)'], [0.1111111111111111, 'rgb(215,48,39)'], [0.2222222222222222, 'rgb(244,109,67)'], 
+    [0.3333333333333333, 'rgb(253,174,97)'], [0.4444444444444444, 'rgb(254,224,144)'], 
+    [0.5555555555555556, 'rgb(224,243,248)'], [0.6666666666666666, 'rgb(171,217,233)'], 
+    [0.7777777777777778, 'rgb(116,173,209)'],
+     [0.8888888888888888, 'rgb(69,117,180)'], [1.0, 'rgb(49,54,149)']]
+    if metric=='maxtemperature' or metric=='mintemprature':
+        df[metric]=df[metric]-273.15
     data = [ dict(
             type = 'scattergeo',
             locationmode = 'USA-states',
-            lon = -df['Longitude'],
-            lat = df['Latitude'],
+            lon = -df['Longitude'].astype(float),
+            lat = df['Latitude'].astype(float),
             text = df['text'],
             mode = 'markers',
             marker = dict(
-                size = 8,
+                size = 4,
                 opacity = 0.8,
                 reversescale = True,
                 autocolorscale = False,
@@ -174,7 +193,7 @@ def generate_spatial(df,graphtitle,metric):
                 color = df[metric],
                 cmax = df[metric].max(),
                 colorbar=dict(
-                    title=metric
+                    title=addunit_metric(metric)
                 )
             ))]
 
@@ -198,8 +217,12 @@ def generate_spatial(df,graphtitle,metric):
 def create_space_series(client,year,metric,dbname='USweather'):
     db = client.get_database(dbname)
     df = pd.DataFrame(list(db[metric].find({'Year':year})))
-    graphtitle='{} of US in Year {}'.format(metric,year)
-    return generate_spatial(df,graphtitle,metric)
+    df.drop(['_id'], axis=1,inplace=True)
+    df.drop_duplicates(keep='last', inplace=True)
+    graphtitle=generate_title2(metric,year)
+    countydf=mongo2df(client,dbname,'countystate')
+    mergedf=df.merge(countydf,how='left',left_on=['Latitude','Longitude'],right_on=['Latitude','Longitude'])
+    return generate_spatial(mergedf,graphtitle,metric)
 
 
 
