@@ -153,13 +153,13 @@ dash_app4.layout= html.Div(children=[
     html.Div('Year'),
     dcc.Dropdown(
         id='year-name',
-        options=ml.get_year(),
+        options=ml.get_year2(),
         value='Year'
     ),
     html.Div('Weather Metrics'),
     dcc.Dropdown(
         id='weather-metric',
-        options=ml.generate_metrics(),
+        options=ml.generate_metrics2(),
         value='Weather metric'
     ),
     html.Div(id='space'),
@@ -170,8 +170,8 @@ dash_app4.layout= html.Div(children=[
     depend.Output('space', 'children'),
     [depend.Input('year-name', 'value'),
      depend.Input('weather-metric', 'value')])
-def predict_space(year,metric):
-    df=ml.download_space_series(dbclient,year,metric)
+def predict_spacetime(year,metric):
+    df=ml.download_space_series2(dbclient,year,metric)
     if df.size<1:
         return ['No data in Year {}'.format(year)]
     return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,df,year,metric))]

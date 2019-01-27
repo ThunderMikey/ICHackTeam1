@@ -242,6 +242,20 @@ def download_space_series(client,year,metric,dbname='USweather'):
         df=pd.DataFrame(list(db['average'].find({})))
         return df
 
+def download_space_series2(client,year,metric,dbname='USweather'):
+    db = client.get_database(dbname)
+    if year!='Mean':
+        df = pd.DataFrame(list(db[metric].find({'Year':year})))
+        try:
+            df.drop(['_id'], axis=1,inplace=True)
+            df.drop_duplicates(keep='last', inplace=True)
+        except:
+            return pd.DataFrame()
+        return df
+    else:
+        df=pd.DataFrame(list(db['average'].find({})))
+        return df
+
 
 def create_space_series(client,df,year,metric,dbname='USweather'):
     graphtitle=generate_title2(metric,year)
