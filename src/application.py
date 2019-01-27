@@ -117,12 +117,7 @@ def predict_time(state,county,metric):
         return['No data for {} in {}'.format(county,state)]
     if metric=='maxtemperature' or metric=='mintemperature':
         data[metric]=data[metric].astype(float)-273.15
-    missingdf=pd.DataFrame()
-    missingdf['Latitude']=hist['Lat']
-    missingdf['Longitude']=hist['Long']
-    missingdf['Year']=ml.get_missing_years(data,'Year')
-    #forecastmodel=model.gp_model.use_pretrain('')
-    #forecast=model.gp_model.gp_prediction(missing,forecasemodel)
+    data.sort_values('Year',inplace=True)
     title = ml.generate_title(metric,county,state)
     return [dcc.Graph(id='ts',figure=ml.create_time_series(data,'Year',metric,title))]
 
