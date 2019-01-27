@@ -27,8 +27,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 # Setting up flask server and dash applications
 server = flask.Flask(__name__)
 dash_app1 = Dash(__name__, server = server, url_base_pathname='/database/', external_stylesheets=external_stylesheets )
-dash_app2 = Dash(__name__, server = server, url_base_pathname='/time/')
-dash_app3 = Dash(__name__, server = server, url_base_pathname='/space/')
+dash_app2 = Dash(__name__, server = server, url_base_pathname='/time/', external_stylesheets=external_stylesheets)
+dash_app3 = Dash(__name__, server = server, url_base_pathname='/space/', external_stylesheets=external_stylesheets)
 
 dash_app1.layout = html.Div(children=[
     html.Div('Database Name'),
@@ -90,7 +90,7 @@ dash_app2.layout = html.Div(children=[
         options=ml.generate_metrics(),
         value='Weather metric'
     ),
-    html.Div([dcc.Graph(id='ts')]),
+    html.Div(id='time'),
     html.Label(['Return ', html.A('mainpage', href='/')])
 ])
 
@@ -106,7 +106,7 @@ def update_county_name(state):
         return html.Div('Invalid county')
 
 @dash_app2.callback(
-    depend.Output('ts', 'figure'),
+    depend.Output('time', 'children'),
     [depend.Input('state-name', 'value'),
      depend.Input('county-name', 'value'),
      depend.Input('weather-metric', 'value')])
@@ -122,7 +122,7 @@ def predict_time(state,county,metric):
     #forecastmodel=model.gp_model.use_pretrain('')
     #forecast=model.gp_model.gp_prediction(missing,forecasemodel)
     title = ml.generate_title(metric,county,state)
-    return ml.create_time_series(data,'Year',metric,title)
+    return [dcc.Graph(id='ts',figure=ml.create_time_series(data,'Year',metric,title))]
 
 dash_app3.layout= html.Div(children=[
     html.Div('Year'),
@@ -137,16 +137,16 @@ dash_app3.layout= html.Div(children=[
         options=ml.generate_metrics(),
         value='Weather metric'
     ),
-    html.Div([dcc.Graph(id='space')]),
+    html.Div(id='space'),
     html.Label(['Return ', html.A('mainpage', href='/')])
 ])
 
 @dash_app3.callback(
-    depend.Output('space', 'figure'),
+    depend.Output('space', 'children'),
     [depend.Input('year-name', 'value'),
      depend.Input('weather-metric', 'value')])
 def predict_space(year,metric):
-    return ml.create_space_series(dbclient,year,metric)
+    return [dcc.Graph(id='space',figure=ml.create_space_series(dbclient,year,metric))]
 
 # Setting up the Flask server and applications
 
