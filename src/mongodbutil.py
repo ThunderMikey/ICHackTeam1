@@ -109,8 +109,9 @@ def generate_title2(metric,year):
     title='{} of US in Year {}'.format(newmetric,year)
     return title
 
-def get_year(start=1997,end=2027):
+def get_year(start=1997,end=2017):
     dropdownoptions=[{'label':x,'value':x} for x in range(start,end+1)]
+    dropdownoptions.append({'label':'Mean','value':'Mean'})
     return dropdownoptions
 
 
@@ -219,13 +220,17 @@ def generate_spatial(df,graphtitle,metric):
 
 def download_space_series(client,year,metric,dbname='USweather'):
     db = client.get_database(dbname)
-    df = pd.DataFrame(list(db[metric].find({'Year':year})))
-    try:
-        df.drop(['_id'], axis=1,inplace=True)
-        df.drop_duplicates(keep='last', inplace=True)
-    except:
-        return pd.DataFrame()
-    return df
+    if metric!='Mean':
+        df = pd.DataFrame(list(db[metric].find({'Year':year})))
+        try:
+            df.drop(['_id'], axis=1,inplace=True)
+            df.drop_duplicates(keep='last', inplace=True)
+        except:
+            return pd.DataFrame()
+        return df
+    else:
+        df=pd.DataFrame(list(db['average'].find({})))
+        return df
 
 
 def create_space_series(client,df,year,metric,dbname='USweather'):
