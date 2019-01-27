@@ -26,6 +26,7 @@
 </head>
 <body>
   <div class="container">
+    <p>Aim: Model and predict the distribution of extreme temperatures and maximum precipitation in the USA.</p>
     <h1>Spatiotemporal Modelling of US Climate Change</h1>
 
 
@@ -41,14 +42,17 @@
     <h3>Spatial Forecasting<a href='/space'><i class="fas fa-door-open"></i></a></h3>
     <p>
     For spatial prediction we opted for a Bayesian Additive Regression Tree (BART), where we model a sum of trees model
-    <span class="math inline">\( y = \sum_i f(\cdot;T_j,M_j) \)</span> <br> (Chipman et al., 2018). To implement this, we 
+    <span class="math inline">\( y(\cdot) = \sum_i f(\cdot;T_j,M_j) + \epsilon. \)</span> <br> (Chipman et al., 2018). To implement this, we 
     use Markov chain Monte Carlo to sample from the posterior and obtained a posterior predictive mean using Monte Carlo
     integration.
     </p>
 
     <h3>Spatiotemporal Forecasting!</h3>
     <p>Spatiotemporal modelling is a relatively new field of statistical study, where we are not only interested in the evolution of
-      time or space as a separate entity, but together as a bivariate covariate.  
+      time or space as a separate entity, but together as a bivariate covariate.  To do this, we use
+      [Gaussian processes](http://www.gaussianprocess.org/gpml/chapters/RW.pdf) with the Gaussian kernel function. There are of course
+      more suitable kernels that we could have explored if time permitting, but this provides a proof of concept as to deploying academic
+      research topics to "simple-to-understand" web applications.
     </p>
 
 </div>
