@@ -1,0 +1,39 @@
+@import url("http://fonts.googleapis.com/css?family=Raleway:300");
+@import url("http://fonts.googleapis.com/css?family=Oxygen");
+
+body{
+  font-family: 'Oxygen', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
+h1,h2,h3,h4 {
+  font-family: 'Raleway', sans-serif;
+}
+
+.container { width: 1000px; }
+h3 {
+  background-color: #D4DAEC;
+  text-indent: 20px;
+}
+h3::before {
+  content: "#";
+  font-size: 40px;
+  color: #999;
+  line-height: 0;
+  display: inline-block;
+  margin: 0 6px 0 0;
+}
+h4 {
+  text-indent: 100px;
+}
+
+g-table-intro h4 {
+  text-indent: 0px;
+}
+
+.subpage-heading {
+  text-align: center;
+}

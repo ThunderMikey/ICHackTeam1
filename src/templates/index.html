@@ -16,51 +16,17 @@
 <link  rel="stylesheet" 
     href="http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
   
-<link rel=stylesheet href="http://fonts.googleapis.com/css?family=Raleway:300"></link>
-<link rel=stylesheet href="http://fonts.googleapis.com/css?family=Oxygen"></link>
-
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
   });
   </script>
-  <script type="text/javascript" async src="path-to-mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
-  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
-<style>
-body{
-  font-family: 'Oxygen', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  padding-top: 60px;
-  padding-bottom: 40px;
-}
 
-h1,h2,h3,h4 {
-  font-family: 'Raleway', sans-serif;
-}
+<!-- has to be launched from root dir -->
+<link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='main.css') }}">
 
-.container { width: 1000px; }
-h3 {
-  background-color: #D4DAEC;
-  text-indent: 20px;
-}
-h3::before {
-  content: "#";
-  font-size: 40px;
-  color: #999;
-  line-height: 0;
-  display: inline-block;
-  margin: 0 6px 0 0;
-}
-h4 {
-  text-indent: 100px;
-}
-
-g-table-intro h4 {
-  text-indent: 0px;
-}
-</style>
 
 </head>
 <body>
@@ -72,7 +38,7 @@ g-table-intro h4 {
 
     <h3>Temporal Forecasting</h3>
 
-    We use $\mbox{AR}(p)$, $p^{th}$ order autoregressive time series models to model changes. Check out our models <a href='/time'>here!</a> <br>
+    We use <span class="math inline">\( \mbox{AR}(p), p^{th} \)</span> order autoregressive time series models to model changes. Check out our models <a href='/time'>here!</a> <br>
 
     <h3>Spatial Forecasting</h3>
 
