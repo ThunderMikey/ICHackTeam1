@@ -19,12 +19,14 @@
 <link rel=stylesheet href="http://fonts.googleapis.com/css?family=Raleway:300"></link>
 <link rel=stylesheet href="http://fonts.googleapis.com/css?family=Oxygen"></link>
 
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-  });
-  </script>
-  <script type="text/javascript" async src="path-to-mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
   
 
 <style>
@@ -72,7 +74,7 @@ g-table-intro h4 {
 
     <h3>Temporal Forecasting</h3>
 
-    We use $\mbox{AR}(p)$, $p^{th}$ order autoregressive time series models to model changes. Check out our models <a href='/time'>here!</a> <br>
+    We use <span class="math inline">\( \mbox{AR}(p), p^{th} \)</span> order autoregressive time series models to model changes. Check out our models <a href='/time'>here!</a> <br>
 
     <h3>Spatial Forecasting</h3>
 
