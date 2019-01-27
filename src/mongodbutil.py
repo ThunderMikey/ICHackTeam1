@@ -97,6 +97,17 @@ def get_depedent_column(client,state,dbname='USweather',collectioname='countysta
 def generate_metrics():
     dropdownoptions=[{'label':'Max Temperature','value':'maxtemperature'},{'label':'Min Temperature','value':'mintemperature'},{'label':'Mean Precipitation','value':'meanprecipitation'},{'label':'Max Precipitation','value':'maxprecipitation'}]
     return dropdownoptions
+    
+def generate_title(metric,county,state):
+    mapping={'maxtemperature':'Max Temperature','mintemperature':'Min Temperature','meanprecipitation':'Mean Precipitation','maxprecipitation':'Max Precipitation'}
+    newmetric=mapping[metric]
+    title='{} of {} in {}'.format(newmetric,county,state)
+    return title
+
+def get_year(start=1997,end=2027):
+    dropdownoptions=[{'label':x,'value':x} for x in range(start,end+1)]
+    return dropdownoptions
+
 
 def generate_historical_data(client,state,county,metric,dbname='USweather',collectionname='countystate'):
     db = client.get_database(dbname)
@@ -137,7 +148,8 @@ def create_time_series(dff,x_col,y_col,title, axis_type='Linear'):
         }
     }
 
-def generate_spatial(df,graphtitle):
+def generate_spatial(df,graphtitle,metric):
+    df['text'] = metric+' '+df[metric].astype(str)
     scl = [ [0,"rgb(5, 10, 172)"],[0.35,"rgb(40, 60, 190)"],[0.5,"rgb(70, 100, 245)"],
     [0.6,"rgb(90, 120, 245)"],[0.7,"rgb(106, 137, 247)"],[1,"rgb(220, 220, 220)"] ]
     data = [ dict(
@@ -158,11 +170,11 @@ def generate_spatial(df,graphtitle):
                     color='rgba(102, 102, 102)'
                 ),
                 colorscale = scl,
-                cmin = 0,
-                color = df['cnt'],
-                cmax = df['cnt'].max(),
+                cmin = df[metric].min(),
+                color = df[metric],
+                cmax = df[metric].max(),
                 colorbar=dict(
-                    title="Incoming flightsFebruary 2011"
+                    title=metric
                 )
             ))]
 
@@ -182,6 +194,14 @@ def generate_spatial(df,graphtitle):
         )
     fig = dict(data=data,layout=layout) 
     return fig
+
+def create_space_series(client,year,metric,dbname='USweather'):
+    db = client.get_database(dbname)
+    df = pd.DataFrame(list(db[metric].find({'Year':year})))
+    graphtitle='{} of US in Year {}'.format(metric,year)
+    return generate_spatial(df,graphtitle,metric)
+
+
 
 if __name__=='__main__':
     client=mongoclient('localhost')

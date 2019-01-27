@@ -118,10 +118,31 @@ def predict_time(state,county,metric):
     missingdf['Year']=ml.get_missing_years(data,'Year')
     #forecastmodel=model.gp_model.use_pretrain('')
     #forecast=model.gp_model.gp_prediction(missing,forecasemodel)
-    title = '{} of {} in {}'.format(metric,county,state)
+    title = ml.generate_title(metric,county,state)
     return ml.create_time_series(data,'Year',metric,title)
 
-dash_app3.layout=html.Div('Space Models')
+dash_app3.layout= html.Div(children=[
+    html.Div('Year'),
+    dcc.Dropdown(
+        id='year-name',
+        options=ml.get_year(),
+        value='Year'
+    ),
+    html.Div('Weather Metrics'),
+    dcc.Dropdown(
+        id='weather-metric',
+        options=ml.generate_metrics(),
+        value='Weather metric'
+    ),
+    html.Div([dcc.Graph(id='space')])
+])
+
+@dash_app3.callback(
+    depend.Output('space', 'figure'),
+    [depend.Input('year-name', 'value'),
+     depend.Input('weather-metric', 'value')])
+def predict_space(year,metric):
+    return ml.create_space_series(dbclient,year,metric)
 
 # Setting up the Flask server and applications
 
