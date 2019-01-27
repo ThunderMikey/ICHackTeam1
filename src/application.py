@@ -155,7 +155,7 @@ def predict_space(year,metric):
 @server.route('/')
 @server.route('/hello')
 def hello():
-    return flask.render_template('mainpage.html')
+    return flask.render_template('index.html')
 
 @server.route('/database')
 def render_dashboard():
