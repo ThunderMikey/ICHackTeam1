@@ -217,15 +217,18 @@ def generate_spatial(df,graphtitle,metric):
     fig = dict(data=data,layout=layout) 
     return fig
 
-def create_space_series(client,year,metric,dbname='USweather'):
+def download_space_series(client,year,metric,dbname='USweather'):
     db = client.get_database(dbname)
     df = pd.DataFrame(list(db[metric].find({'Year':year})))
     try:
         df.drop(['_id'], axis=1,inplace=True)
         df.drop_duplicates(keep='last', inplace=True)
     except:
-        if df.size<1:
-            return ['No data in Year {}'.format(year)]
+        return pd.DataFrame()
+    return df
+
+
+def create_space_series(client,df,year,metric,dbname='USweather'):
     graphtitle=generate_title2(metric,year)
     countydf=mongo2df(client,dbname,'countystate')
     mergedf=df.merge(countydf,how='left',left_on=['Latitude','Longitude'],right_on=['Latitude','Longitude'])

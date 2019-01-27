@@ -148,7 +148,10 @@ dash_app3.layout= html.Div(children=[
     [depend.Input('year-name', 'value'),
      depend.Input('weather-metric', 'value')])
 def predict_space(year,metric):
-    return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,year,metric))]
+    df=ml.download_space_series(dbclient,year,metric)
+    if df.size<1:
+        return ['No data in Year {}'.format(year)]
+    return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,df,year,metric))]
 
 # Setting up the Flask server and applications
 
