@@ -116,7 +116,7 @@ def get_year(start=1997,end=2017):
     dropdownoptions.append({'label':'Mean','value':'Mean'})
     return dropdownoptions
 
-def get_year2(start=1997,end=2027):
+def get_year2(start=1997,end=2025):
     dropdownoptions=[{'label':x,'value':x} for x in range(start,end+1)]
     return dropdownoptions
 

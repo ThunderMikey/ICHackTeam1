@@ -23,3 +23,12 @@ ml.df2mongo(dbclient,'USweather','maxprecipitation',df3)
 
 df1=pd.read_csv('./data/prediction_space.csv',sep=',')
 ml.df2mongo(dbclient,'USweather','average',df1)
+
+df1=pd.read_csv('./data/california_spacetime_prediction_maxprecipitation.csv',sep=',')
+ml.df2mongo(dbclient,'USweather','california_maxprecipitation',df1)
+
+df2=pd.read_csv('./data/california_spacetime_prediction_maxtemperature.csv',sep=',')
+ml.df2mongo(dbclient,'USweather','california_maxtemperature',df2)
+
+df3=pd.read_csv('./data/california_spacetime_prediction_mintemperature.csv',sep=',')
+ml.df2mongo(dbclient,'USweather','california_mintemperature',df3)
