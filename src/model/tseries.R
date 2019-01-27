@@ -32,4 +32,4 @@ stopCluster(cl)
 predictions <- data.frame(predictions)
 colnames(predictions) <- c("maxprecipitatio", "Latitude", "Longitude", "Year")
 
-write.csv("../data/prediction_maxprecipitatio_time.csv", x = predictions, row.names=FALSE)
+write.csv("../data/prediction_maxprecipitation_time.csv", x = predictions, row.names=FALSE)
