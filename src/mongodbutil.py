@@ -107,6 +107,8 @@ def generate_title2(metric,year):
     mapping={'maxtemperature':'Max Temperature','mintemperature':'Min Temperature','meanprecipitation':'Mean Precipitation','maxprecipitation':'Max Precipitation'}
     newmetric=mapping[metric]
     title='{} of US in Year {}'.format(newmetric,year)
+    if year=='Mean':
+        title='Average US {}'.format(newmetric)
     return title
 
 def get_year(start=1997,end=2017):
