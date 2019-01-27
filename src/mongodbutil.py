@@ -115,16 +115,19 @@ def get_year(start=1997,end=2027):
 
 
 def generate_historical_data(client,state,county,metric,dbname='USweather',collectionname='countystate'):
-    db = client.get_database(dbname)
-    df = pd.DataFrame(list(db[collectionname].find({'state_fullname':state,'County':county})))
-    df.drop(['_id'], axis=1,inplace=True)
-    df.drop_duplicates(keep='last', inplace=True)
-    latitude=df.iloc[0]['Latitude']
-    longitude=df.iloc[0]['Longitude']
-    df2=pd.DataFrame(list(db[metric].find({'Latitude':latitude,'Longitude':longitude})))
-    df2.drop(['_id'], axis=1,inplace=True)
-    df2.drop_duplicates(keep='last', inplace=True)
-    return {'Historical':df2,'Lat':latitude,'Long':longitude}
+    try:
+        db = client.get_database(dbname)
+        df = pd.DataFrame(list(db[collectionname].find({'state_fullname':state,'County':county})))
+        df.drop(['_id'], axis=1,inplace=True)
+        df.drop_duplicates(keep='last', inplace=True)
+        latitude=df.iloc[0]['Latitude']
+        longitude=df.iloc[0]['Longitude']
+        df2=pd.DataFrame(list(db[metric].find({'Latitude':latitude,'Longitude':longitude})))
+        df2.drop(['_id'], axis=1,inplace=True)
+        df2.drop_duplicates(keep='last', inplace=True)
+        return {'Historical':df2,'Lat':latitude,'Long':longitude}
+    except:
+        return {'Historical':pd.DataFrame(),'Lat':'','Long':''}
     
 def get_missing_years(df,timecolumn,start=1997,end=2027):
     existing_year=df[timecolumn].tolist()
