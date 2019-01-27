@@ -10,41 +10,30 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="icon" type="image/png" href="favicon.ico">
-  <style>
-  body {
-    padding-top: 60px;
-    padding-bottom: 40px;
-  }
-  </style>
   
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-responsive.no-icons.min.css" rel="stylesheet">
-<!-- <link rel="stylesheet" href="/css/bootstrap.min.css"> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link  rel="stylesheet" 
     href="http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
-  <link rel="stylesheet" href="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/frameworks/bootstrap/css/bootstrap-responsive.min.css">
   
-  <link rel="stylesheet" href="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/frameworks/bootstrap/css/main.css">
-  <link rel="stylesheet" href="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/highlighters/prettify/css/twitter-bootstrap.css" />
-  <script src="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/frameworks/bootstrap/js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/frameworks/bootstrap/js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-    <link rel=stylesheet href="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/widgets/nyt_home/css/base.css"></link>
 <link rel=stylesheet href="http://fonts.googleapis.com/css?family=Raleway:300"></link>
 <link rel=stylesheet href="http://fonts.googleapis.com/css?family=Oxygen"></link>
 
-  <script src="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/widgets/nyt_home/js/d3.v3.js"></script>
-<script src="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/widgets/nyt_home/js/queue.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
+  <script type="text/javascript" async src="path-to-mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
+  
 
-</head>
-<body>
-    <div class="container">
-      
 <style>
 body{
   font-family: 'Oxygen', sans-serif;
   font-size: 16px;
   line-height: 24px;
+  padding-top: 60px;
+  padding-bottom: 40px;
 }
 
 h1,h2,h3,h4 {
@@ -54,7 +43,15 @@ h1,h2,h3,h4 {
 .container { width: 1000px; }
 h3 {
   background-color: #D4DAEC;
-  text-indent: 100px; 
+  text-indent: 20px;
+}
+h3::before {
+  content: "#";
+  font-size: 40px;
+  color: #999;
+  line-height: 0;
+  display: inline-block;
+  margin: 0 6px 0 0;
 }
 h4 {
   text-indent: 100px;
@@ -65,41 +62,26 @@ g-table-intro h4 {
 }
 </style>
 
-<h1>Spatiotemporal Modelling of US Climate Change</h1>
+</head>
+<body>
+  <div class="container">
+    <h1>Spatiotemporal Modelling of US Climate Change</h1>
 
 
-<p><br/></p>
+    <p><br/></p>
 
-<h3>Temporal Forecasting</h3>
+    <h3>Temporal Forecasting</h3>
 
-Check out our models <a href='/time'>here!</a> <br>
+    We use $\mbox{AR}(p)$, $p^{th}$ order autoregressive time series models to model changes. Check out our models <a href='/time'>here!</a> <br>
 
-<h3>Spatial Forecasting</h3>
+    <h3>Spatial Forecasting</h3>
 
-and <a href='/space'>here</a> <br>
+    and <a href='/space'>here</a> <br>
 
-<h3>Spatiotemporal Forecasting!</h3>
+    <h3>Spatiotemporal Forecasting!</h3>
 
-also <a href='/spacetime'>here</a> <br>
 
 <p>Finally check out our Github repo <a href='https://github.com/icmathssoc/AI-Hack-2018'></a>here!</a>  </p>
 </div>
         
 </body>
-  <script src="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/frameworks/bootstrap/js/vendor/bootstrap.min.js"></script>
-  <script src="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/frameworks/bootstrap/js/plugins.js"></script>
-  <script src="https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/frameworks/bootstrap/js/main.js"></script>
-  <!-- Load Javascripts for Widgets -->
-  
-  <!-- Google Prettify -->
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
-  <script src='https://github.com/timelyportfolio/rCharts_nyt_home_price/tree/gh-pages/libraries/highlighters/prettify/js/lang-r.js'></script>
-  <script>
-    var pres = document.getElementsByTagName("pre");
-    for (var i=0; i < pres.length; ++i) {
-      pres[i].className = "prettyprint linenums";
-    }
-    prettyPrint();
-  </script>
-  <!-- End Google Prettify --> 
-  </html>
