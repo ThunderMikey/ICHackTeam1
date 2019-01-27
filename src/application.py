@@ -125,6 +125,7 @@ def predict_time(state,county,metric):
     return [dcc.Graph(id='ts',figure=ml.create_time_series(data,'Year',metric,title))]
 
 dash_app3.layout= html.Div(children=[
+    html.Div('Historical Weather Data in the US from 1997 to 2007 by geographical distribution'),
     html.Div('Year'),
     dcc.Dropdown(
         id='year-name',
@@ -152,6 +153,7 @@ def predict_space(year,metric):
     return [dcc.Graph(id='newspace',figure=ml.create_space_series(dbclient,df,year,metric))]
 
 dash_app4.layout= html.Div(children=[
+    html.Div('Weather Forecast in California from 2018 to 2025'),
     html.Div('Year'),
     dcc.Dropdown(
         id='year-name',

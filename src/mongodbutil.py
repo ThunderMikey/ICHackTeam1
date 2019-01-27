@@ -116,7 +116,7 @@ def get_year(start=1997,end=2017):
     dropdownoptions.append({'label':'Mean','value':'Mean'})
     return dropdownoptions
 
-def get_year2(start=1997,end=2025):
+def get_year2(start=2018,end=2025):
     dropdownoptions=[{'label':x,'value':x} for x in range(start,end+1)]
     return dropdownoptions
 
@@ -183,7 +183,7 @@ def generate_spatial(df,graphtitle,metric):
     [0.5555555555555556, 'rgb(224,243,248)'], [0.6666666666666666, 'rgb(171,217,233)'], 
     [0.7777777777777778, 'rgb(116,173,209)'],
      [0.8888888888888888, 'rgb(69,117,180)'], [1.0, 'rgb(49,54,149)']]
-    if metric=='maxtemperature' or metric=='mintemperature':
+    if metric=='maxtemperature' or metric=='mintemperature' or metric=='california_maxtemperature' or metric=='california_mintemperature':
         df[metric]=df[metric]-273.15
 
     df['text'] = df['state_fullname']+' '+df['County']+' '+df[metric].astype(str)
@@ -247,7 +247,7 @@ def download_space_series(client,year,metric,dbname='USweather'):
 def download_space_series2(client,year,metric,dbname='USweather'):
     db = client.get_database(dbname)
     if year!='Mean':
-        df = pd.DataFrame(list(db[metric].find({'Year':year})))
+        df= pd.DataFrame(list(db['california_'+metric].find({'Year':year})))
         try:
             df.drop(['_id'], axis=1,inplace=True)
             df.drop_duplicates(keep='last', inplace=True)
