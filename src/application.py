@@ -22,7 +22,8 @@ dbhost='localhost'
 dbclient=ml.mongoclient(dbhost)
 
 # CSS 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [#'https://codepen.io/chriddyp/pen/bWLwgP.css',
+        '/static/main.css']
 
 # Setting up flask server and dash applications
 server = flask.Flask(__name__)
@@ -73,13 +74,14 @@ def update_output_div(database,table):
 
 # Application 2
 dash_app2.layout = html.Div(children=[
-    html.Div('State Name'),
+    html.H1('Historical Data', className='subpage-heading'),
+    html.H2('State Name'),
     dcc.Dropdown(
         id='state-name',
         options=ml.get_column_unique(dbclient),
         value='State Name'
     ),
-    html.Div('County Name'),
+    html.H2('County Name'),
     dcc.Dropdown(
         id='county-name',
         options=[{'value':'Table','label':'Table'}],

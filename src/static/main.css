@@ -1,3 +1,6 @@
+@import url("http://fonts.googleapis.com/css?family=Raleway:300");
+@import url("http://fonts.googleapis.com/css?family=Oxygen");
+
 body{
   font-family: 'Oxygen', sans-serif;
   font-size: 16px;
@@ -29,4 +32,8 @@ h4 {
 
 g-table-intro h4 {
   text-indent: 0px;
+}
+
+.subpage-heading {
+  text-align: center;
 }
